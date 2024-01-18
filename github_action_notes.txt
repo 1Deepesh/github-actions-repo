@@ -1,0 +1,180 @@
+Workflow 
+   | 
+  Job
+   |
+  Step1 
+  Step2
+   ...
+  Step3
+
+Workflow - 
+	attached to a github repo.
+	contains one or emore jobs.
+	Triggered upon Events.
+
+Jobs - 
+	Define a Runner (execution environment)
+	Contain one or more steps. 
+	Run in parallel (default) or sequential.
+	Can be conditional.
+
+Steps - 
+	Execute a Shell Script or an action.
+	Can use custom or third-party actions.
+	Steps are executed in order (not parallel)
+	can be conditional.
+
+------------------
+
+name: First Workflow 
+on: workflow_dispatch 
+jobs: 
+ first-job: 
+  runs-on: ubuntu-latest 
+  steps: 
+   - name: "print greeting."
+     run: echo "Hello World!"
+   - name: "print Goodbye"
+     run: echo "Done - bye!"
+
+
+NOTE: If  you need to run multiple shell commands (or multi-line commands, e.g., for readability), you can easily do so by adding the pipe symbol (|) as a value after the run: key.
+
+Like this:
+
+...
+run: |
+    echo "First output"
+    echo "Second output"
+This will run both commands in one step.
+
+
+---------------------------
+
+Action in Github : common tasks, for example checking out the code from repository to workupon, you can use your run command to do git clone but you can also use marketplace actions "actions/checkout" in Github (readily available) to do this clone. 
+ - to use action in our github action pipeline, we use keyword - uses.
+	e.g. - uses: actions/checkout@v3
+
+
+name: Demo Workflow
+on: push
+jobs: 
+ get-code:
+  runs-on: ubuntu-latest
+  steps: 
+  - name: Get Code
+    uses: actions/checkout@v3
+ 
+  - name: Install NodeJS 
+    uses: actions/setup-node@v3 
+    with: 
+      node-version: 18
+
+  - name: Install dependencies 
+    run: npm ci 
+ 
+  - name: Run tests 
+    run: npm tests
+
+ deploy:
+  runs-on: ubuntu-latest
+  steps: 
+  - name: Get Code
+    uses: actions/checkout@v3
+ 
+  - name: Install NodeJS 
+    uses: actions/setup-node@v3 
+    with: 
+      node-version: 18
+
+  - name: Install dependencies 
+    run: npm ci 
+  - name: "deploy to the server"
+    run: echo "Deploying...."
+
+
+The above two jobs getcode and deploy will run parallely (bydefault). To change it to sequential, we need to use keyword "needs". example below : 
+
+name: Demo Workflow
+on: push
+jobs: 
+ get-code:
+  runs-on: ubuntu-latest
+  steps: 
+  - name: Get Code
+    uses: actions/checkout@v3
+ 
+  - name: Install NodeJS 
+    uses: actions/setup-node@v3 
+    with: 
+      node-version: 18
+
+  - name: Install dependencies 
+    run: npm ci 
+ 
+  - name: Run tests 
+    run: npm tests
+
+ deploy:
+  needs: get-code 	# note, if more jobs are needed, then we can use a list e.g. needs: [get-code, job1, job2]
+  runs-on: ubuntu-latest
+  steps: 
+  - name: Get Code
+    uses: actions/checkout@v3
+ 
+  - name: Install NodeJS 
+    uses: actions/setup-node@v3 
+    with: 
+      node-version: 18
+
+  - name: Install dependencies 
+    run: npm ci 
+  - name: "deploy to the server"
+    run: echo "Deploying...."
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+using multiple events to trigger our workflows:
+----------------------------------------------
+
+name: Demo Workflow
+on: push		
+
+in the above example, the workflow will only run on pushes. but let's say we want to run the workflow on push and manually, then, we can use a list as well. example - 
+
+name: Demo Workflow 
+on: [push, workflow_dispatch, ...]
+  
+
+Filtering Events :
+-----------------------
+
+We can filter the events on some conditions (activity). For example, if we use pull_requests as our event to trigger the workflow, then we can also control whether it should trigger the workflow when the PR is opened, closed, edited, etc.
+
+see example below : 
+name: Demo Workflow
+on:
+ pull_request:                 # pay attention here, for controlled events:
+  types: [opened, edited]
+  branches: 
+   - main 
+   - dev-*          # dev-new, dev-this-new, etc.
+   - feature/**     # feature/new and feature/new/button
+jobs: 
+ get-code:
+  runs-on: ubuntu-latest
+  steps: 
+  - name: Get Code
+    uses: actions/checkout@v3
+ 
+  - name: Install NodeJS 
+    uses: actions/setup-node@v3 
+    with: 
+      node-version: 18
+
+  - name: Install dependencies 
+    run: npm ci 
+ 
+  - name: Run tests 
+    run: npm tests
