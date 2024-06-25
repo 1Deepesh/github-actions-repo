@@ -49,6 +49,73 @@ run: |
 This will run both commands in one step.
 
 
+-----------------------------------------------
+Github Workflow Events:
+------------------------
+
+# See 02-workflow-events/README.md for more information
+# about different triggers for GitHub Actions.
+
+name: 02 - Workflow Events
+
+on:
+  workflow_dispatch:
+
+jobs:
+  echo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show the trigger
+        run: echo "I've been triggered by a ${{ github.event_name }} event."
+
+NOTE: ${{ github.event_name }} will display the event which triggered the workflow. 
+
+------------------------------------------------------------------------------
+Workflow Runners : 
+-----------------------
+
+Custom and Github Managed runners are available. 
+Github Managed Runners are - ubuntu, windows and macos 
+ - ubuntu-latest 
+ - windows-latest 
+ - macos-latest 
+
+example : 
+
+# See 03-workflow-runners/README.md for more information
+# about the different runners for GitHub Actions.
+
+name: 03 - Workflow Runners
+
+on: workflow_dispatch
+
+jobs:
+  ubuntu-echo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show OS
+        run: |
+          echo "This job is running on an Ubuntu runner."
+          echo "Runner OS: $RUNNER_OS"
+  windows-echo:
+    runs-on: windows-latest
+    steps:
+      - name: Show OS
+        shell: bash
+        run: |
+          echo "This job is running on a Windows runner."
+          echo "Runner OS: $RUNNER_OS"
+  mac-echo:
+    runs-on: macos-latest
+    steps:
+      - name: Show OS
+        run: |
+          echo "This job is running on a MacOS runner."
+          echo "Runner OS: $RUNNER_OS"
+
+
+NOTE: in case of windows runner, we have specified the bash shell to use by using shell command in steps.
+
 ---------------------------
 
 Action in Github : common tasks, for example checking out the code from repository to workupon, you can use your run command to do git clone but you can also use marketplace actions "actions/checkout" in Github (readily available) to do this clone. 
