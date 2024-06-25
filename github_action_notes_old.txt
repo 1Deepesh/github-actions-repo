@@ -116,7 +116,9 @@ jobs:
 
 NOTE: in case of windows runner, we have specified the bash shell to use by using shell command in steps.
 
----------------------------
+---------------------------------------------------------------------------------------------------------
+
+Github Actions:
 
 Action in Github : common tasks, for example checking out the code from repository to workupon, you can use your run command to do git clone but you can also use marketplace actions "actions/checkout" in Github (readily available) to do this clone. 
  - to use action in our github action pipeline, we use keyword - uses.
