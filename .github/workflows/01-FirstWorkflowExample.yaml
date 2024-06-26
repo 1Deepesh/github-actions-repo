@@ -1,0 +1,19 @@
+name: First Workflow 
+#on: [push, workflow_dispatch]    # multiple ways to declare "on" in a github actions yaml file.
+#on: push
+on: 
+  workflow_dispatch:
+jobs: 
+ first-job: 
+  runs-on: ubuntu-latest 
+  steps: 
+   - name: "print greeting."
+     run: echo "Hello World!"
+   - name: "print Goodbye"
+     run: echo "Done - bye!"
+ second-job:
+  needs: first-job
+  runs-on: ubuntu-latest 
+  steps: 
+   - name: "hello again!"
+     run: echo "Hello AGAIN!"
