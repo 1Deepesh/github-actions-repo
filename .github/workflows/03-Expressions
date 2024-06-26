@@ -1,5 +1,6 @@
 name: Demo Expressions
 on:
+    push: 
     workflow_dispatch:
         inputs:
             toProd:
