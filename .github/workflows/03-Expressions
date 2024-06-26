@@ -2,7 +2,7 @@ name: Demo Expressions
 on:
     push: 
     workflow_dispatch:
-        inputs:
+        inputs: 
             toProd:
                 type: boolean
                 default: false
