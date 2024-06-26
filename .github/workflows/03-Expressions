@@ -6,8 +6,16 @@ on:
             toProd:
                 type: boolean
                 default: false
+env:
+    workflow_var1: 'I am a Workflow Variable'
 jobs:
     my-demo-job:
+        env:
+            v_name: "NAME is JOB"
         runs-on: ubuntu-latest
         steps:
-            run: echo "Hello, World!"
+            env: 
+                v_name: "name is steps"
+            run: |
+                echo "The value of workflow var1 is ${{var.workflow_var1}}"
+                echo "The value of local variable name: $v_name"
