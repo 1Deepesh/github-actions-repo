@@ -1,5 +1,7 @@
 name: 03-WorkflowEvents
-on: push
+on: 
+ workflow_dispatch:
+ #push:
 jobs: 
  demo-job1:
   runs-on: ubuntu-latest 
