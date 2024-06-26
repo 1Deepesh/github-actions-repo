@@ -14,8 +14,9 @@ jobs:
             v_name: "NAME is JOB"
         runs-on: ubuntu-latest
         steps:
-            env: 
+            - name: my demo step
+              env: 
                 v_name: "name is steps"
-            run: |
+              run: |
                 echo "The value of workflow var1 is ${{var.workflow_var1}}"
                 echo "The value of local variable name: $v_name"
