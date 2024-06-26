@@ -1,9 +1,9 @@
-name: 02 - workflow events 
+name: 03-WorkflowEvents
 on: push
 jobs: 
- echo
- runs-on: ubuntu-latest 
- steps: 
+ demo-job1:
+  runs-on: ubuntu-latest 
+  steps: 
   - name: show the trigger
     run: | 
       echo "Checking who triggered this job"
