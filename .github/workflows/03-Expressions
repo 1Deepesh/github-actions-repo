@@ -1,0 +1,11 @@
+name: Demo Expressions
+on:
+    workflow_dispatch:
+        inputs:
+            toProd:
+                type: boolean
+                default: false
+jobs:
+    my-demo-job:
+        runs-on: ubuntu-latest
+        run: echo "Hello, World!"
