@@ -1,0 +1,45 @@
+
+name: Using Functions
+
+on: 
+  pull_request:
+  workflow_dispatch: 
+
+jobs: 
+  echo1:
+    runs-on: ubuntu-latest 
+    steps: 
+      - name: Print the PR Title.
+        run: echo "${{ github.event.pull_request.title }}"
+      
+      - name: Print PR Labels.
+        run: | 
+          cat << EOF 
+          ${{ toJSON(github.event.pull_request.labels) }}
+          EOF 
+      
+      - name: Bug Step 
+        if: ${{ !cancelled() && contains(github.event.pull_request.title, 'fix')}}
+        run: echo "This step ran because the PR contains FIX."
+
+      - name: Sleep for 20 Seconds 
+        run: sleep 20 
+
+      - name: Failing Step 
+        run: exit 1 
+      
+      - name: I will be skipped because the above step fails.
+        if: ${{ success() }}
+        run: echo "If you see this step, it means the above command worked fine."
+      
+      - name: I will execute.
+        if: ${{ failure() }}
+        run: echo "Function failure(), above step must have failed.""
+
+      - name: "I will execute ! cancelled function demo"
+        if: ${{ !cancelled() }}
+        run: echo "this is because of !cancellled() == always."
+      
+      - name: the block will execute when flow is cancelled.
+        if: ${{ cancelled() }}
+        run: echo "cancelled. so I ran."
