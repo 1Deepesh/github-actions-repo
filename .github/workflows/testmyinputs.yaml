@@ -1,0 +1,17 @@
+name: my input demo 
+on: 
+  workflow_dispatch:
+   inputs: 
+     deploy to production:
+       type: boolean
+       default: false 
+       required: true 
+
+jobs: 
+  echo1:
+  runs-on: ubuntu-latest
+    steps: 
+      - name: my first step.
+        run: |
+          echo "You are seeing whether it is a prod build or not.
+          echo " ${{ inputs. deploy_to_prod}}"
