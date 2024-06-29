@@ -2,7 +2,7 @@ name: my input demo
 on: 
   workflow_dispatch:
    inputs: 
-     deploy to production:
+     deploy_to_prod:
        type: boolean
        default: false 
        required: true 
@@ -14,4 +14,4 @@ jobs:
       - name: my first step.
         run: |
           echo "You are seeing whether it is a prod build or not.
-          echo " ${{ inputs. deploy_to_prod }}"
+          echo "${{ inputs. deploy_to_prod }}"
