@@ -13,5 +13,5 @@ jobs:
     steps: 
       - name: my first step.
         run: |
-          echo "You are seeing whether it is a prod build or not.
+          echo "You are seeing whether it is a prod build or not."
           echo "${{ inputs. deploy_to_prod }}"
