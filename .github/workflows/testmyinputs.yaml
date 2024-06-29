@@ -1,17 +1,36 @@
-name: my input demo 
-on: 
-  workflow_dispatch:
-   inputs: 
-     deploy_to_prod:
-       type: boolean
-       default: false 
-       required: true 
+name: Deployment Workflow
 
-jobs: 
-  echo1:
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_to_production:
+        description: 'Deploy to production?'
+        required: true
+        default: 'no'
+        type: choice
+        options:
+          - 'yes'
+          - 'no'
+
+jobs:
+  deploy:
     runs-on: ubuntu-latest
-    steps: 
-      - name: my first step.
+    steps:
+      - name: Check Deployment Environment
+        id: check_deployment
         run: |
-          echo "You are seeing whether it is a prod build or not."
-          echo "${{ inputs. deploy_to_prod }}"
+          if [ "${{ github.event.inputs.deploy_to_production }}" == "yes" ]; then
+            echo "Deploying to production"
+            echo "::set-output name=deploy_prod::true"
+          else
+            echo "Deploying to lower environments"
+            echo "::set-output name=deploy_prod::false"
+          fi
+
+  nonprod_deployment:
+    needs: deploy
+    if: steps.check_deployment.outputs.deploy_prod == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploying to Lower Environments
+        run: echo "Deploying to lower environments"
