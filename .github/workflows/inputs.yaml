@@ -1,7 +1,6 @@
 name: 01 - Workflow Deployment 
 
 on: 
-  push: 
   workflow_dispatch: 
     inputs:
       toProd?:
@@ -17,7 +16,8 @@ on:
 
 jobs: 
   my-prod-job:
-   runs-on: ubuntu-latest 
+   runs-on: ubuntu-latest
+   if: ${{ inputs.deployment_environment.option == "Prod" }}
    steps:
      - name: prod deployment
        run: echo "Deploying to Production Environment."
