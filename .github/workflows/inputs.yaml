@@ -17,7 +17,7 @@ on:
 jobs: 
   my-prod-job:
    runs-on: ubuntu-latest
-   if: ${{ inputs.deployment_environment.option == "Prod" }}
+   if: "${{ inputs.deployment_environment.options == "Prod" }}"
    steps:
      - name: prod deployment
        run: echo "Deploying to Production Environment."
