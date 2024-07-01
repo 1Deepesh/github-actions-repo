@@ -1,19 +1,40 @@
-name: First Workflow 
-#on: [push, workflow_dispatch]    # multiple ways to declare "on" in a github actions yaml file.
-#on: push
-on: 
+name: Deploy to Environment
+
+on:
   workflow_dispatch:
-jobs: 
- first-job: 
-  runs-on: ubuntu-latest 
-  steps: 
-   - name: "print greeting."
-     run: echo "Hello World!"
-   - name: "print Goodbye"
-     run: echo "Done - bye!"
- second-job:
-  needs: first-job
-  runs-on: ubuntu-latest 
-  steps: 
-   - name: "hello again!"
-     run: echo "Hello AGAIN!"
+    inputs:
+      environment:
+        description: 'Choose environment to deploy to'
+        required: true
+        default: 'dev'
+        options:
+          - dev
+          - uat
+          - stage
+          - prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Deploy to ${{ github.event.inputs.environment }}
+        run: |
+          if [ "${{ github.event.inputs.environment }}" == "dev" ]; then
+            echo "Deploying to dev..."
+            # Add your deployment commands for dev environment
+          elif [ "${{ github.event.inputs.environment }}" == "uat" ]; then
+            echo "Deploying to uat..."
+            # Add your deployment commands for uat environment
+          elif [ "${{ github.event.inputs.environment }}" == "stage" ]; then
+            echo "Deploying to stage..."
+            # Add your deployment commands for stage environment
+          elif [ "${{ github.event.inputs.environment }}" == "prod" ]; then
+            echo "Deploying to prod..."
+            # Add your deployment commands for prod environment
+          else
+            echo "Invalid environment specified."
+            exit 1
+          fi
