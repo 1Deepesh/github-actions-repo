@@ -1,0 +1,23 @@
+name: 01 - Workflow Deployment 
+
+on: 
+  workflow_dispatch: 
+    inputs:
+      toProd?:
+       description: deployment_environment
+       required: true
+       type: choice
+       options:
+        - DEV
+        - UAT
+        - Stage
+        - PreProd
+        - Prod
+
+jobs: 
+  my-prod-job:
+   runs-on: ubuntu-latest
+   if: "${{ inputs.deployment_environment.options == "Prod" }}"
+   steps:
+     - name: prod deployment
+       run: echo "Deploying to Production Environment."
